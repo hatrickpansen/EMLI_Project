@@ -18,7 +18,7 @@ led_builtin = machine.Pin(25, machine.Pin.OUT)
 uart = machine.UART(0, 115200)
 
 def moisture():
-    return moisture_sensor_read_u16()/655.36
+    return moisture_sensor.read_u16()/655.36
 
 def light():
     return light_sensor.read_u16()/655.36
