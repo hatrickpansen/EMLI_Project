@@ -3,7 +3,7 @@ import utime
 from sys import stdin
 import uselect
 
-pump_control = Pin(17, Pin.OUT)
+pump_control = Pin(16, Pin.OUT)
 pump_water_alarm = Pin(13, Pin.IN)
 plant_water_alarm = Pin(9, Pin.IN)
 
