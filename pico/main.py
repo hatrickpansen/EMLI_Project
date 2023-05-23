@@ -4,7 +4,9 @@ from sys import stdin
 import uselect
 
 pump_control = Pin(16, Pin.OUT)
+pump_alarm = False
 pump_water_alarm = Pin(13, Pin.IN)
+plant_alarm = False
 plant_water_alarm = Pin(9, Pin.IN)
 
 moisture_sensor_pin = Pin(26, mode=Pin.IN)
@@ -35,10 +37,18 @@ def pump_request():
 
 while True:
     led_builtin.toggle()
-    if pump_request():
+    if pump_request() and not plant_alarm and not pump_alarm:
         pump_control.high()
         utime.sleep(1)
         pump_control.low()
     else:
         utime.sleep(1)
+    if plant_water_alarm.value() == 0:
+        plant_alarm = True
+    else:
+        plant_alarm = False
+    if pump_water_alarm.value() == 1:
+        pump_alarm = True
+    else:
+        pump_alarm = False
     print("%d, %d, %.0f, %.0f" % (plant_water_alarm.value(), pump_water_alarm.value(), moisture(), light()))
