@@ -7,13 +7,15 @@ mkfifo "$fifo"
 
 screen -L $PORT $BAUDRATE > "$fifo" &
 
+sleep 3
+
 cat "$fifo" | while IFS=, read -r plant_water_alarm pump_water_alarm moisture light; do
   mosquitto_pub -h localhost -t pico/plant_water_alarm -m "$plant_water_alarm"
   mosquitto_pub -h localhost -t pico/pump_water_alarm -m "$pump_water_alarm"
   mosquitto_pub -h localhost -t pico/moisture -m "$moisture"
   mosquitto_pub -h localhost -t pico/light -m "$light"
 
-  if (( $(echo "$moisture < 50" | bc -l) )) && [ "$pump_water_alarm" -eq 1 ] && [ "$plant_water_alarm" -eq 0 ]; then
+  if [ "$moisture" -lt 50 ] && [ "$pump_water_alarm" -eq 1 ] && [ "$plant_water_alarm" -eq 0 ]; then
     echo "Moisture is below 50"
     curl -X GET http://192.168.10.222/led/red/off
     curl -X GET http://192.168.10.222/led/green/off
