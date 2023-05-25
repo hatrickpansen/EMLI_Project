@@ -39,6 +39,7 @@ start_run_pump() {
         sleep 5  # Wait for 5 seconds before restarting "parse_sensors.sh"
         start_parse_sensors
     fi
+    rm /tmp/run_pump.pid
 }
 
 # MQTT topic to subscribe to
