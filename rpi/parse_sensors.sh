@@ -4,11 +4,11 @@ PORT=/dev/ttyACM0 # something
 BAUDRATE=115200
 
 timeout 1s cat "$PORT" | while IFS=, read -r plant_water_alarm pump_water_alarm moisture light; do
-  mosquitto_pub -h localhost -t pico/plant_water_alarm -m "$plant_water_alarm"
-  mosquitto_pub -h localhost -t pico/pump_water_alarm -m "$pump_water_alarm"
-  mosquitto_pub -h localhost -t pico/moisture -m "$moisture"
-  mosquitto_pub -h localhost -t pico/light -m "$light"
-
+  if [ ! -z "$plant_water_alarm" ]; then
+    mosquitto_pub -h localhost -t pico/plant_water_alarm -m "$plant_water_alarm"
+    mosquitto_pub -h localhost -t pico/pump_water_alarm -m "$pump_water_alarm"
+    mosquitto_pub -h localhost -t pico/moisture -m "$moisture"
+    mosquitto_pub -h localhost -t pico/light -m "$light"
   if [ "$moisture" -lt 50 ] && [ "$pump_water_alarm" -eq 1 ] && [ "$plant_water_alarm" -eq 0 ]; then
     echo "Moisture is below 50"
     curl -X GET http://192.168.10.222/led/red/off
