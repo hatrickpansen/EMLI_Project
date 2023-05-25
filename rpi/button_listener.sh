@@ -34,6 +34,8 @@ start_run_pump() {
         echo "run_pump.sh is already running."
     else
         ./run_pump.sh &  # Start the "run_pump.sh" script
+        pump_time=$(date +"%H:%M")
+        mosquitto_pub -h $mqtt_broker -p $mqtt_broker -t "pico/last_pump" -m "$pump_time"
         echo $! > /tmp/run_pump.pid  # Save the PID to a file
         echo "run_pump.sh started."
         sleep 5  # Wait for 5 seconds before restarting "parse_sensors.sh"
