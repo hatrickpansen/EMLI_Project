@@ -4,6 +4,7 @@
 
 # Function to start the "parse_sensors.sh" script
 start_parse_sensors() {
+    echo "Start Parse Sensors"
     if [ -f "/tmp/parse_sensors.pid" ]; then
         echo "parse_sensors.sh is already running."
     else
@@ -15,6 +16,7 @@ start_parse_sensors() {
 
 # Function to stop the "parse_sensors.sh" script
 stop_parse_sensors() {
+    echo "Stop Parse Sensors"
     if [ -f "/tmp/parse_sensors.pid" ]; then
         pid=$(cat /tmp/parse_sensors.pid)
         kill "$pid"  # Send SIGTERM signal to the process
@@ -27,6 +29,7 @@ stop_parse_sensors() {
 
 # Function to start the "run_pump.sh" script
 start_run_pump() {
+    echo "Start run pump"
     if [ -f "/tmp/run_pump.pid" ]; then
         echo "run_pump.sh is already running."
     else
@@ -47,6 +50,7 @@ mqtt_port="1883" # måske behøves ikke?
 
 # Function to check the MQTT result and take appropriate action
 check_mqtt_result() {
+    echo "Checking MQTT result"
     result=$(mosquitto_sub -h $mqtt_broker -p $mqtt_port -t $mqtt_topic -C 1)
     if ((result > 1)); then
         stop_parse_sensors
