@@ -52,7 +52,7 @@ mqtt_port="1883" # måske behøves ikke?
 check_mqtt_result() {
     echo "Checking MQTT result"
     result=$(mosquitto_sub -h $mqtt_broker -p $mqtt_port -t $mqtt_topic -C 1)
-    if ((result > 1)); then
+    if [[ $result -gt 1 ]]; then
         stop_parse_sensors
         start_run_pump
     fi
