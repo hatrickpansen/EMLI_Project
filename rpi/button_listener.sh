@@ -2,6 +2,17 @@
 
 #Det her script skal bare køre altid og lytte på button press.
 
+# Function to start the "parse_sensors.sh" script
+start_parse_sensors() {
+    if [ -f "/tmp/parse_sensors.pid" ]; then
+        echo "parse_sensors.sh is already running."
+    else
+        ./parse_sensors.sh &  # Start the "parse_sensors.sh" script
+        echo $! > /tmp/parse_sensors.pid  # Save the PID to a file
+        echo "parse_sensors.sh started."
+    fi
+}
+
 # Function to stop the "parse_sensors.sh" script
 stop_parse_sensors() {
     if [ -f "/tmp/parse_sensors.pid" ]; then
@@ -22,6 +33,8 @@ start_run_pump() {
         ./run_pump.sh &  # Start the "run_pump.sh" script
         echo $! > /tmp/run_pump.pid  # Save the PID to a file
         echo "run_pump.sh started."
+        sleep 5  # Wait for 5 seconds before restarting "parse_sensors.sh"
+        start_parse_sensors
     fi
 }
 
