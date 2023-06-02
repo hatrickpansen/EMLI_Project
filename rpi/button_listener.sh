@@ -66,5 +66,5 @@ start_parse_sensors
 
 while true; do
     check_mqtt_result
-    sleep 1  # Skal nok være 2 da kravet er at den skal vande ved button press indenfor 2 sek
+    sleep 2 
 done
